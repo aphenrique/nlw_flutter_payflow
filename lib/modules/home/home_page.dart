@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:payflow/modules/home/home_controller.dart';
+import 'package:payflow/modules/login/login_controller.dart';
 import 'package:payflow/shared/themes/app_colors.dart';
 import 'package:payflow/shared/themes/app_text_styles.dart';
+import 'package:payflow/shared/widgets/social_login/logout_button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final homeController = HomeController();
+  final loginController = LoginController();
   final pages = [
     Container(
       color: Colors.red,
@@ -31,6 +34,13 @@ class _HomePageState extends State<HomePage> {
           height: 152,
           child: Center(
             child: ListTile(
+              leading: Container(
+                height: 48,
+                width: 48,
+                decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(5)),
+              ),
               title: Text.rich(TextSpan(
                   text: "Olá, ",
                   style: AppTextStyles.titleRegular,
@@ -43,13 +53,9 @@ class _HomePageState extends State<HomePage> {
                 "Mantenha seus boletos em dia",
                 style: AppTextStyles.captionShape,
               ),
-              trailing: Container(
-                height: 48,
-                width: 48,
-                decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(5)),
-              ),
+              trailing: LogoutButton(onTap: () {
+                loginController.googleSignOut(context);
+              }),
             ),
           ),
         ),

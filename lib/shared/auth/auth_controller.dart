@@ -35,4 +35,12 @@ class AuthController {
       setUser(context, null);
     }
   }
+
+  Future<void> deleteUser(BuildContext context) async {
+    final instance = await SharedPreferences.getInstance();
+    if (instance.containsKey("user")) {
+      Future<bool> result = instance.clear();
+      setUser(context, null);
+    }
+  }
 }
