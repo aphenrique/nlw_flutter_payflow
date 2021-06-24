@@ -23,10 +23,41 @@
   <meta name="apple-mobile-web-app-title" content="payflow">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
+  <!-- GoogleSignIn settings -->
+  <meta name="google-signin-client_id" content="251289954338-bbm29tfm8qohu0adqm7o376ciig65993.apps.googleusercontent.com">
+
   <title>payflow</title>
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
+
+  <!-- SCRIPT DO FIREBASE -->
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+      https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+      apiKey: "AIzaSyDp-1GpPAJj4IrNIB7FwoqAve9FRCppN1E",
+      authDomain: "payflow-rockeseat.firebaseapp.com",
+      projectId: "payflow-rockeseat",
+      storageBucket: "payflow-rockeseat.appspot.com",
+      messagingSenderId: "300609483016",
+      appId: "1:300609483016:web:ba49930f4c954f84fa3cbd",
+      measurementId: "G-QFRX94YHCF"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
+
+  <!-- FIM DO SCRIPT DO FIREBASE -->
+
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->

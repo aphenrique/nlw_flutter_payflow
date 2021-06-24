@@ -2,6 +2,7 @@
     package="com.example.payflow">
    <application
         android:label="payflow"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
