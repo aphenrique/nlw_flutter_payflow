@@ -3,6 +3,7 @@ import 'package:payflow/modules/extract/extract_page.dart';
 import 'package:payflow/modules/home/home_controller.dart';
 import 'package:payflow/modules/login/login_controller.dart';
 import 'package:payflow/modules/meus_boletos/meus_boletos_page.dart';
+import 'package:payflow/shared/auth/auth_controller.dart';
 import 'package:payflow/shared/models/user_model.dart';
 import 'package:payflow/shared/themes/app_colors.dart';
 import 'package:payflow/shared/themes/app_text_styles.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final homeController = HomeController();
   final loginController = LoginController();
+  final authController = AuthController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +47,44 @@ class _HomePageState extends State<HomePage> {
                 style: AppTextStyles.captionShape,
               ),
               trailing: GestureDetector(
-                // TODO Fix logoutButton
-                onTap: () => PopupMenuButton(
-                    onSelected: (value) {
-                      loginController.googleSignOut(context);
-                      Navigator.pushNamed(context, "/login");
-                    },
-                    itemBuilder: (BuildContext context) => [
-                          const PopupMenuItem(
-                            value: null,
-                            child: Text("Sair"),
+                onTap: () => showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 150,
+                        color: AppColors.background,
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text(
+                                "Deseja fazer logout?",
+                                style: AppTextStyles.captionBoldBody,
+                              ),
+                              ElevatedButton(
+                                child: Text(
+                                  'Sim',
+                                  style: AppTextStyles.captionBoldBody,
+                                ),
+                                onPressed: () {
+                                  loginController.googleSignOut(context);
+                                  authController.deleteUser(context);
+                                },
+                              ),
+                              ElevatedButton(
+                                child: Text(
+                                  'Não',
+                                  style: AppTextStyles.captionBoldBody,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
                           ),
-                        ]),
+                        ),
+                      );
+                    }),
                 child: Column(
                   children: [
                     Container(
