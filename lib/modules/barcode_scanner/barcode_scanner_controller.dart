@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -12,27 +14,37 @@ class BarcodeScannerController {
   BarcodeScannerStatus get status => statusNotifier.value;
   set status(BarcodeScannerStatus status) => statusNotifier.value = status;
 
-  var barcodeScanner = GoogleMlKit.vision.barcodeScanner();
-
-  CameraController? cameraController;
+  final barcodeScanner = GoogleMlKit.vision.barcodeScanner();
 
   InputImage? imagePicker;
+  CameraController? cameraController;
+
+  Timer? delay;
 
   void getAvaiableCameras() async {
     try {
       final response = await availableCameras();
       final camera = response.firstWhere(
           (element) => element.lensDirection == CameraLensDirection.back);
-      final cameraController =
+      cameraController =
           CameraController(camera, ResolutionPreset.max, enableAudio: false);
 
-      await cameraController.initialize();
+      await cameraController!.initialize();
 
       scanWithCamera();
       listenCamera();
     } catch (e) {
       status = BarcodeScannerStatus.error(e.toString());
     }
+  }
+
+  void scanWithCamera() {
+    status = BarcodeScannerStatus.available();
+    //Future.delayed(Duration(seconds: 20)).then((value) {
+    delay = Timer(Duration(seconds: 20), () {
+      if (status.hasBarcode == false)
+        status = BarcodeScannerStatus.error("Timeout de leitura de boleto");
+    });
   }
 
   void scanWithImagePicker() async {
@@ -84,14 +96,6 @@ class BarcodeScannerController {
       });
   }
 
-  void scanWithCamera() {
-    status = BarcodeScannerStatus.available();
-    Future.delayed(Duration(seconds: 20)).then((value) {
-      if (status.hasBarcode == false)
-        status = BarcodeScannerStatus.error("Timeout de leitura de boleto");
-    });
-  }
-
   Future<void> scannerBarcode(InputImage inputImage) async {
     try {
       final barcodes = await barcodeScanner.processImage(inputImage);
@@ -114,6 +118,7 @@ class BarcodeScannerController {
   }
 
   void dispose() {
+    delay!.cancel();
     statusNotifier.dispose();
     barcodeScanner.close();
     if (status.showCamera) {
